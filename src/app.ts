@@ -9,6 +9,7 @@ app.use(cors());
 
 //application rotues
 app.use("/POST/api", createUserRoute);
+app.use("/GET/api", createUserRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

@@ -25,5 +25,5 @@ export type Users = {
   isActive: boolean;
   hobbies: string[];
   address: UserAddress;
-  orders: UserOrder[];
+  orders?: UserOrder[];
 };

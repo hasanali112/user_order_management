@@ -70,6 +70,7 @@ const usersSchema = new Schema<Users>({
   address: UserAddressSchema,
   orders: {
     type: [UserOrderSchema],
+    default: undefined,
   },
 });
 
