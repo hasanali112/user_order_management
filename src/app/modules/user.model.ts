@@ -6,40 +6,49 @@ import {
   Users,
 } from "./user.interface";
 
-const FullNameOfUserSchema = new Schema<FullNameOfUser>({
-  firstName: {
-    type: String,
-    required: true,
+const FullNameOfUserSchema = new Schema<FullNameOfUser>(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
   },
-  lastName: {
-    type: String,
-    required: true,
-  },
-});
+  { _id: false }
+);
 
-const UserAddressSchema = new Schema<UserAddress>({
-  street: {
-    type: String,
+const UserAddressSchema = new Schema<UserAddress>(
+  {
+    street: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
   },
-  city: {
-    type: String,
-  },
-  country: {
-    type: String,
-  },
-});
+  { _id: false }
+);
 
-const UserOrderSchema = new Schema<UserOrder>({
-  productName: {
-    type: String,
+const UserOrderSchema = new Schema<UserOrder>(
+  {
+    productName: {
+      type: String,
+    },
+    price: {
+      type: Number,
+    },
+    quantity: {
+      type: Number,
+    },
   },
-  price: {
-    type: Number,
-  },
-  quantity: {
-    type: Number,
-  },
-});
+  { _id: false }
+);
 
 const usersSchema = new Schema<Users>({
   userId: {
