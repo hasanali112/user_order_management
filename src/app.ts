@@ -1,7 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import { createUserRoute } from "./app/modules/user.route";
-const app = express();
+const app: Application = express();
 
 //application middleware
 app.use(express.json());
@@ -11,6 +11,7 @@ app.use(cors());
 app.use("/api", createUserRoute);
 app.use("/api", createUserRoute);
 app.use("/api", createUserRoute);
+app.use("/api/users", createUserRoute);
 app.use("/api/users", createUserRoute);
 app.use("/api/users", createUserRoute);
 app.use("/api/users", createUserRoute);

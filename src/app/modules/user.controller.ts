@@ -160,6 +160,29 @@ const getOrderFromDB = async (req: Request, res: Response) => {
   }
 };
 
+//calculate the order price
+const getTotalPriceDB = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const priceOrder = parseInt(userId);
+    const result = await userManagement.calculateThePrice(priceOrder);
+    res.status(200).json({
+      success: true,
+      message: "Total price calculated successfully!",
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Order fetched fail",
+      error: {
+        status: 400,
+        description: "Order fetched fail",
+      },
+    });
+  }
+};
+
 export const createUserController = {
   createUser,
   getAllUsers,
@@ -168,4 +191,5 @@ export const createUserController = {
   deleteUserFromDB,
   addOrderIntoDB,
   getOrderFromDB,
+  getTotalPriceDB,
 };
