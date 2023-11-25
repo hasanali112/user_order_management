@@ -86,9 +86,35 @@ const updateAUser = async (req: Request, res: Response) => {
   }
 };
 
+//delete a user
+const deleteUserFromDB = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userDeleteInt = parseInt(userId);
+    const result = await userManagement.deleteUser(userDeleteInt);
+    res.status(200).json({
+      success: true,
+      message: "Delete Successfully",
+      data: result,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "no update",
+      error: {
+        status: 400,
+        description: err.message || "no update",
+      },
+    });
+  }
+};
+
 export const createUserController = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateAUser,
+  deleteUserFromDB,
 };
