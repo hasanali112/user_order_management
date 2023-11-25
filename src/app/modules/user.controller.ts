@@ -92,11 +92,11 @@ const deleteUserFromDB = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const userDeleteInt = parseInt(userId);
-    const result = await userManagement.deleteUser(userDeleteInt);
+    await userManagement.deleteUser(userDeleteInt);
     res.status(200).json({
       success: true,
       message: "Delete Successfully",
-      data: result,
+      data: null,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,15 +114,50 @@ const deleteUserFromDB = async (req: Request, res: Response) => {
 
 //order update
 const addOrderIntoDB = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const orderParse = parseInt(userId);
-  const { user: userData } = req.body;
-  const result = await userManagement.updateOrder(orderParse, userData);
-  res.status(200).json({
-    success: true,
-    message: "order update Successfully",
-    data: result,
-  });
+  try {
+    const { userId } = req.params;
+    const orderParse = parseInt(userId);
+    const { user: userData } = req.body;
+    await userManagement.updateOrder(orderParse, userData);
+    res.status(200).json({
+      success: true,
+      message: "order update Successfully",
+      data: null,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "no update",
+      error: {
+        status: 400,
+        description: err.message || "no update",
+      },
+    });
+  }
+};
+
+//find order from user;
+const getOrderFromDB = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const singleOrder = parseInt(userId);
+    const result = await userManagement.getAllOrder(singleOrder);
+    res.status(200).json({
+      success: true,
+      message: "Order fetched successfully!",
+      data: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Order fetched fail",
+      error: {
+        status: 400,
+        description: "Order fetched fail",
+      },
+    });
+  }
 };
 
 export const createUserController = {
@@ -132,4 +167,5 @@ export const createUserController = {
   updateAUser,
   deleteUserFromDB,
   addOrderIntoDB,
+  getOrderFromDB,
 };

@@ -14,6 +14,7 @@ app.use("/api", createUserRoute);
 app.use("/api/users", createUserRoute);
 app.use("/api/users", createUserRoute);
 app.use("/api/users", createUserRoute);
+app.use("/api/users", createUserRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

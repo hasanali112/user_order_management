@@ -63,16 +63,29 @@ const deleteUser = async (userId: number) => {
 
 //add a order
 const updateOrder = async (userId: number, userOrderData: Users) => {
-  const result = await UserModel.findOneAndUpdate(
-    { userId },
-    {
-      $set: {
-        orders: userOrderData.orders,
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          orders: userOrderData.orders,
+        },
       },
-    },
-    { new: true }
-  );
+      { new: true }
+    );
 
+    return result;
+  } else {
+    throw new Error("User not found");
+  }
+};
+
+//retive all order
+const getAllOrder = async (userId: number) => {
+  const result = await UserModel.findOne({ userId }).select({
+    _id: 0,
+    orders: 1,
+  });
   return result;
 };
 
@@ -83,4 +96,5 @@ export const userManagement = {
   updateUser,
   deleteUser,
   updateOrder,
+  getAllOrder,
 };
