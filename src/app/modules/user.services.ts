@@ -36,8 +36,24 @@ const getSingleUserFromDB = async (userId: number) => {
   }
 };
 
+//update user
+const updateUser = async (userId: number, userData: Users) => {
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.findOneAndUpdate({ userId }, userData, {
+      new: true,
+      runValidators: true,
+    }).select({
+      password: 0,
+    });
+    return result;
+  } else {
+    throw new Error("User not found");
+  }
+};
+
 export const userManagement = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
+  updateUser,
 };
