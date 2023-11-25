@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { userManagement } from "./user.services";
 
-const createStudent = async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
     const result = await userManagement.createUserIntoDB(userData);
@@ -15,7 +15,7 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-const getAllStudents = async (req: Request, res: Response) => {
+const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userManagement.getAllUserFromDB();
     res.status(200).json({
@@ -28,7 +28,23 @@ const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
-export const createStudentController = {
-  createStudent,
-  getAllStudents,
+const getSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const userIdIntoNumber = parseInt(userId);
+    const result = await userManagement.getSingleUserFromDB(userIdIntoNumber);
+    res.status(200).json({
+      success: true,
+      message: "Get Successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createUserController = {
+  createUser,
+  getAllUsers,
+  getSingleUser,
 };

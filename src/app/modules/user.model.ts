@@ -4,8 +4,10 @@ import {
   UserAddress,
   UserOrder,
   Users,
+  tUserModel,
 } from "./user.interface";
 
+//name schema
 const FullNameOfUserSchema = new Schema<FullNameOfUser>(
   {
     firstName: {
@@ -20,6 +22,7 @@ const FullNameOfUserSchema = new Schema<FullNameOfUser>(
   { _id: false }
 );
 
+//sub-address schma
 const UserAddressSchema = new Schema<UserAddress>(
   {
     street: {
@@ -35,6 +38,7 @@ const UserAddressSchema = new Schema<UserAddress>(
   { _id: false }
 );
 
+//sub-order schema
 const UserOrderSchema = new Schema<UserOrder>(
   {
     productName: {
@@ -50,25 +54,32 @@ const UserOrderSchema = new Schema<UserOrder>(
   { _id: false }
 );
 
-const usersSchema = new Schema<Users>({
+//user schema
+const usersSchema = new Schema<Users, tUserModel>({
   userId: {
-    type: String,
+    type: Number,
     required: true,
+    unique: true,
   },
   userName: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
   },
-  fullName: FullNameOfUserSchema,
+  fullName: {
+    type: FullNameOfUserSchema,
+    required: true,
+  },
   age: {
     type: Number,
   },
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   isActive: {
     type: Boolean,
@@ -76,11 +87,20 @@ const usersSchema = new Schema<Users>({
   hobbies: {
     type: [String],
   },
-  address: UserAddressSchema,
+  address: {
+    type: UserAddressSchema,
+    required: true,
+  },
   orders: {
     type: [UserOrderSchema],
     default: undefined,
   },
 });
 
-export const UserModel = model<Users>("Users", usersSchema);
+usersSchema.statics.isUserExists = async function (userId: number) {
+  const existUser = await UserModel.findOne({ userId });
+  return existUser;
+};
+
+//model
+export const UserModel = model<Users, tUserModel>("Users", usersSchema);

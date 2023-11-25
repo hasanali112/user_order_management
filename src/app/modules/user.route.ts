@@ -1,10 +1,12 @@
 import express from "express";
-import { createStudentController } from "./user.controller";
+import { createUserController } from "./user.controller";
 
 const router = express.Router();
 
-router.post("/users", createStudentController.createStudent);
+router.post("/users", createUserController.createUser);
 
-router.get("/users", createStudentController.getAllStudents);
+router.get("/users", createUserController.getAllUsers);
+
+router.get("/:userId", createUserController.getSingleUser);
 
 export const createUserRoute = router;
