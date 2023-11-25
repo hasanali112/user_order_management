@@ -61,10 +61,26 @@ const deleteUser = async (userId: number) => {
   }
 };
 
+//add a order
+const updateOrder = async (userId: number, userOrderData: Users) => {
+  const result = await UserModel.findOneAndUpdate(
+    { userId },
+    {
+      $set: {
+        orders: userOrderData.orders,
+      },
+    },
+    { new: true }
+  );
+
+  return result;
+};
+
 export const userManagement = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
   updateUser,
   deleteUser,
+  updateOrder,
 };

@@ -62,6 +62,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+//update a user
 const updateAUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -111,10 +112,24 @@ const deleteUserFromDB = async (req: Request, res: Response) => {
   }
 };
 
+//order update
+const addOrderIntoDB = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const orderParse = parseInt(userId);
+  const { user: userData } = req.body;
+  const result = await userManagement.updateOrder(orderParse, userData);
+  res.status(200).json({
+    success: true,
+    message: "order update Successfully",
+    data: result,
+  });
+};
+
 export const createUserController = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateAUser,
   deleteUserFromDB,
+  addOrderIntoDB,
 };
