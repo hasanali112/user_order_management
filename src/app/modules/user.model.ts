@@ -6,6 +6,8 @@ import {
   Users,
   tUserModel,
 } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../config";
 
 //name schema
 const FullNameOfUserSchema = new Schema<FullNameOfUser>(
@@ -68,6 +70,7 @@ const usersSchema = new Schema<Users, tUserModel>({
   },
   password: {
     type: String,
+    required: true,
   },
   fullName: {
     type: FullNameOfUserSchema,
@@ -95,6 +98,16 @@ const usersSchema = new Schema<Users, tUserModel>({
     type: [UserOrderSchema],
     default: undefined,
   },
+});
+
+usersSchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
 });
 
 usersSchema.statics.isUserExists = async function (userId: number) {
