@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userManagement } from "./user.services";
 
+//query for create user
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
@@ -10,11 +11,20 @@ const createUser = async (req: Request, res: Response) => {
       message: "Create successfully",
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      error: {
+        status: 400,
+        description: err.message,
+      },
+    });
   }
 };
 
+//query for getall user
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userManagement.getAllUserFromDB();
@@ -28,6 +38,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+//query for get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -38,8 +49,16 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: "Get Successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      error: {
+        status: 400,
+        description: err.message,
+      },
+    });
   }
 };
 

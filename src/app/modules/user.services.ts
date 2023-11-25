@@ -1,6 +1,7 @@
 import { Users } from "./user.interface";
 import { UserModel } from "./user.model";
 
+//create new user
 const createUserIntoDB = async (user: Users) => {
   if (await UserModel.isUserExists(user.userId)) {
     throw new Error("already exists");
@@ -9,6 +10,7 @@ const createUserIntoDB = async (user: Users) => {
   return result;
 };
 
+//get all user
 const getAllUserFromDB = async () => {
   const result = await UserModel.find().select({
     _id: 0,
@@ -21,12 +23,17 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+//find specific user
 const getSingleUserFromDB = async (userId: number) => {
-  const result = await UserModel.findOne({ userId }).select({
-    password: 0,
-    _id: 0,
-  });
-  return result;
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.findOne({ userId }).select({
+      password: 0,
+      _id: 0,
+    });
+    return result;
+  } else {
+    throw new Error("User not found");
+  }
 };
 
 export const userManagement = {
