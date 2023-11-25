@@ -36,8 +36,15 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: "Get Successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "no user",
+      error: {
+        status: 400,
+        description: "no user",
+      },
+    });
   }
 };
 
@@ -151,13 +158,14 @@ const getOrderFromDB = async (req: Request, res: Response) => {
       message: "Order fetched successfully!",
       data: result,
     });
-  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "Order fetched fail",
+      message: err.message || "Order fetched fail",
       error: {
         status: 400,
-        description: "Order fetched fail",
+        description: err.message || "Order fetched fail",
       },
     });
   }
@@ -174,13 +182,14 @@ const getTotalPriceDB = async (req: Request, res: Response) => {
       message: "Total price calculated successfully!",
       data: result,
     });
-  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: "Order fetched fail",
+      message: err.message || "Order fetched fail",
       error: {
         status: 400,
-        description: "Order fetched fail",
+        description: err.message || "Order fetched fail",
       },
     });
   }

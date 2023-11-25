@@ -82,38 +82,46 @@ const updateOrder = async (userId: number, userOrderData: Users) => {
 
 //retive all order
 const getAllOrder = async (userId: number) => {
-  const result = await UserModel.findOne({ userId }).select({
-    _id: 0,
-    orders: 1,
-  });
-  return result;
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.findOne({ userId }).select({
+      _id: 0,
+      orders: 1,
+    });
+    return result;
+  } else {
+    throw new Error("User not found");
+  }
 };
 
 //calculate the price
 const calculateThePrice = async (userId: number) => {
-  const result = await UserModel.aggregate([
-    {
-      $match: { userId: userId },
-    },
-    {
-      $unwind: "$orders",
-    },
-    {
-      $group: {
-        _id: "$userId ",
-        totalPrice: {
-          $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.aggregate([
+      {
+        $match: { userId: userId },
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $group: {
+          _id: "$userId ",
+          totalPrice: {
+            $sum: { $multiply: ["$orders.price", "$orders.quantity"] },
+          },
         },
       },
-    },
-    {
-      $project: {
-        _id: 0,
-        totalPrice: 1,
+      {
+        $project: {
+          _id: 0,
+          totalPrice: 1,
+        },
       },
-    },
-  ]);
-  return result;
+    ]);
+    return result[0];
+  } else {
+    throw new Error("User not found");
+  }
 };
 
 export const userManagement = {
