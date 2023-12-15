@@ -1,4 +1,4 @@
-import { Users } from "./user.interface";
+import { UserOrder, Users } from "./user.interface";
 import { UserModel } from "./user.model";
 
 //create new user
@@ -14,7 +14,7 @@ const createUserIntoDB = async (user: Users) => {
 const getAllUserFromDB = async () => {
   const result = await UserModel.find().select({
     _id: 0,
-    userName: 1,
+    username: 1,
     fullName: 1,
     age: 1,
     email: 1,
@@ -27,8 +27,9 @@ const getAllUserFromDB = async () => {
 const getSingleUserFromDB = async (userId: number) => {
   if (await UserModel.isUserExists(userId)) {
     const result = await UserModel.findOne({ userId }).select({
-      password: 0,
       _id: 0,
+      password: 0,
+      orders: 0,
     });
     return result;
   } else {
@@ -43,7 +44,9 @@ const updateUser = async (userId: number, userData: Users) => {
       new: true,
       runValidators: true,
     }).select({
+      _id: 0,
       password: 0,
+      orders: 0,
     });
     return result;
   } else {
@@ -62,16 +65,24 @@ const deleteUser = async (userId: number) => {
 };
 
 //add a order
-const updateOrder = async (userId: number, userOrderData: Users) => {
+const updateOrder = async (userId: number, orderData: UserOrder) => {
   if (await UserModel.isUserExists(userId)) {
-    const result = await UserModel.findOneAndUpdate(
+    const result = await UserModel.updateOne(
       { userId },
       {
-        $set: {
-          orders: userOrderData.orders,
+        $push: {
+          orders: {
+            productName: orderData.productName,
+            price: orderData.price,
+            quantity: orderData.quantity,
+          },
         },
       },
-      { new: true }
+      {
+        upsert: true,
+        new: true,
+        runValidators: true,
+      }
     );
 
     return result;

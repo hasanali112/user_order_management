@@ -23,7 +23,7 @@ const UserOrderValidationSchema = z.object({
 // Zod schema for Users
 export const UsersValidationSchema = z.object({
   userId: z.number({ required_error: "User ID is required" }),
-  userName: z.string({ required_error: "User name is required" }),
+  username: z.string({ required_error: "User name is required" }),
   password: z.string({ required_error: "Password is required" }),
   fullName: FullNameOfUserValidationSchema,
   age: z.number(),
@@ -31,7 +31,7 @@ export const UsersValidationSchema = z.object({
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: UserAddressValidationSchema,
-  orders: z.array(UserOrderValidationSchema),
+  orders: z.array(UserOrderValidationSchema).optional(),
 });
 
 export default UsersValidationSchema;

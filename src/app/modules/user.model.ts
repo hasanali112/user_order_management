@@ -63,7 +63,7 @@ const usersSchema = new Schema<Users, tUserModel>({
     required: true,
     unique: true,
   },
-  userName: {
+  username: {
     type: String,
     required: true,
     unique: true,
@@ -99,6 +99,12 @@ const usersSchema = new Schema<Users, tUserModel>({
     default: undefined,
   },
 });
+
+usersSchema.methods.toJSON = function () {
+  const userPassord = this.toObject();
+  delete userPassord.password;
+  return userPassord;
+};
 
 usersSchema.pre("save", async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias

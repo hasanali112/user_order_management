@@ -6,7 +6,7 @@ import UsersValidationSchema from "./user.validation";
 //query for create user
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const userData = req.body;
     const zodParseData = UsersValidationSchema.parse(userData);
     const result = await userManagement.createUserIntoDB(zodParseData);
     res.status(200).json({
@@ -77,7 +77,7 @@ const updateAUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const userUpdateInt = parseInt(userId);
-    const { user: userData } = req.body;
+    const userData = req.body;
     const result = await userManagement.updateUser(userUpdateInt, userData);
     res.status(200).json({
       success: true,
@@ -127,7 +127,7 @@ const addOrderIntoDB = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const orderParse = parseInt(userId);
-    const { user: userData } = req.body;
+    const userData = req.body;
     await userManagement.updateOrder(orderParse, userData);
     res.status(200).json({
       success: true,
